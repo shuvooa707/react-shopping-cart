@@ -1,0 +1,22 @@
+.product {
+  background-color: #eee;
+  padding: 5px 10px;
+  margin: 5px;
+  min-width: 30vw;
+}
+
+.addToCart {
+  color: white;
+  background-color: dodgerblue;
+  border: none;
+  border-radius: 3px;
+  padding: 3px 5px;
+  margin: 5px 0px;
+  cursor: pointer;
+  box-shadow: 2px 2px 5px #eee;
+}
+
+.total {
+  margin: 0px 10px;
+}
+
