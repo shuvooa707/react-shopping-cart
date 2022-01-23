@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Cart from './Cart.js';
 import Product from './Product.js';
 import './style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,19 +13,11 @@ import {
 import phones from './Phones.js';
 
 export default function App() {
-  let [line, setLine] = useState(0);
   let [cart, setCart] = useState([]);
-  let [k, setK] = useState(parseInt(Math.random() * Date.now()));
   let [totalProduct, setTotalProduct] = useState(0);
   let [totalProductPrice, setTotalProductPrice] = useState(0);
   let [products, setProducts] = useState( phones.phones ); 
 
-  let [cartContainerVisibility, setCartContainerVisibility] = useState(0);
-
-  function showCart() {
-    setCartContainerVisibility(!cartContainerVisibility);
-    // console.log(phones);
-  }
 
   function updateCart(product) {
     if (cart[product.id]) {
@@ -115,70 +108,17 @@ export default function App() {
 
   return (
     <div className="container">
-      <div
-        className={`cart-container ${
-          !cartContainerVisibility ? 'hide-cart' : ''
-        }`}
-      >
-        <div
-          className={`cart-show-button`}
-          onClick={(_) => {
-            showCart();
-          }}
-        >
-          <FontAwesomeIcon icon={faShoppingCart} />
-        </div>
-        <div className="cart-header">
-          <div>
-            <FontAwesomeIcon icon={faShoppingCart} /> Cart
-          </div>
-          <div>
-            <FontAwesomeIcon
-              icon={faTrash}
-              onClick={(_) => {
-                clearCart();
-              }}
-            />
-          </div>
-        </div>
-        <div className={`cart-product-list`}>
-          <table className={`cart-product-table`}>
-            <tbody>
-              <tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Count</th>
-                <th>Total</th>
-              </tr>
-            </tbody>
-            <tbody>
-              {Object.keys(cart).map((pid) => {
-                let p = products.find((p) => p.id == pid);
-                return (
-                  <tr>
-                    <td>{p.name}</td>
-                    <td>{p.price}</td>
-                    <td>
-                      <div className={`add-cart-bar`}>
-                        <FontAwesomeIcon icon={faPlus} onClick={(_) => {}} />
-                        <span className={`total`}>{cart[pid]}</span>
-                        <FontAwesomeIcon icon={faMinus} onClick={(_) => {}} />
-                      </div>
-                    </td>
-                    <td>{p.price * cart[pid]}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <Cart 
+        cart={ cart }
+        clearCart={ clearCart.bind(this) }
+        
+      />
       <nav className="navbar">
         <span className={`totalProduct ${!totalProduct ? 'hide' : ''}`}>
           {totalProduct}
         </span>
         <FontAwesomeIcon icon={faShoppingCart} />
-        <span className="totalProductPrice">{totalProductPrice} tk</span>
+        <span className="totalProductPrice">{totalProductPrice} $</span>
       </nav>
       <div className="products">
         {products.map((p) => {

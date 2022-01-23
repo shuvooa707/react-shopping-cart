@@ -65,6 +65,11 @@ svg {
   color: coral;
   background: white;
   cursor: pointer;
+  transition: .2s all linear;
+}
+.cart-show-button:hover {
+  background: coral;
+  color: white;
 }
 
 .cart-header {
