@@ -1,28 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import "./css/cart.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faShoppingCart,
   faPlus,
   faMinus,
   faTrash,
+  faTimes
 } from '@fortawesome/free-solid-svg-icons';
 
 import phones from './Phones.js';
 export default function Cart(props) {
-  let { cart, clearCart } = props;
+  let { cart, clearCart, updateProduct, removeProduct, cartBellNode, getProductTotal } = props;
   let [products, setProducts] = useState(phones.phones);  
 
   let [cartContainerVisibility, setCartContainerVisibility] = useState(0);
+  let [cartVisible, setCartVisible] =  useState(0);
+  let [totalProductOnCart, setTotalProductOnCart] =  useState(0);
+  
+  useEffect( _ => {
+    cartBellNode.current = tingTing;
+    setTotalProductOnCart(getProductTotal());
+  })
+
+  function tingTing() {
+    console.log("Ting Ting");
+    let cartIcon = document.querySelector(".cart-icon");
+    cartIcon.classList.add("ting-bell");
+    
+    setTimeout(() => {
+      cartIcon.classList.remove("ting-bell");
+    }, 4000);
+  }
 
   function showCart() {
     setCartContainerVisibility(!cartContainerVisibility);
+    setCartVisible(!cartVisible);
+  }
+
+  
+  function incrementTotal(id, name, price) {
+
+    // increments products in the cart
+    updateProduct({ id: id, name: name, price: price });
+    
+  }
+
+  function decrementTotal(id, name, price) {
+  
+    // decrements products in the cart
+    removeProduct(id);
   }
 
   return (
     <div
-      className={`cart-container ${
-        !cartContainerVisibility ? 'hide-cart' : ''
-      }`}
+      className={`cart-container ${ !cartContainerVisibility ? 'hide-cart' : '' }`}
     >
       <div
         className={`cart-show-button`}
@@ -30,7 +62,9 @@ export default function Cart(props) {
           showCart();
         }}
       >
-        <FontAwesomeIcon icon={faShoppingCart} />
+        <FontAwesomeIcon icon={faShoppingCart} className={`cart-icon ${!cartVisible ? "" : "hide" }`} />
+        <FontAwesomeIcon icon={faTimes} className={`cart-close-icon ${cartVisible ? "" : "hide" }`} />
+        <span id='cart-item-count' className={`${totalProductOnCart ? "" : "hide"}`}>{totalProductOnCart}</span>
       </div>
       <div className="cart-header">
         <div>
@@ -56,23 +90,25 @@ export default function Cart(props) {
             </tr>
           </tbody>
           <tbody>
-            {Object.keys(cart).map((pid) => {
-              let p = products.find((p) => p.id == pid);
-              return (
-                <tr>
-                  <td>{p.name}</td>
-                  <td>{p.price}</td>
-                  <td>
-                    <div className={`add-cart-bar`}>
-                      <FontAwesomeIcon icon={faPlus} onClick={(_) => {}} />
-                      <span className={`total`}>{cart[pid]}</span>
-                      <FontAwesomeIcon icon={faMinus} onClick={(_) => {}} />
-                    </div>
-                  </td>
-                  <td>{p.price * cart[pid]}</td>
-                </tr>
-              );
-            })}
+            {
+              Object.keys(cart).map((pid) => {
+                let p = products.find((p) => p.id == pid);
+                return (
+                  <tr>
+                    <td>{p.name}</td>
+                    <td>{p.price}</td>
+                    <td>
+                      <div className={`add-cart-bar`}>
+                        <FontAwesomeIcon icon={faPlus} onClick={(_) => { incrementTotal(p.id, p.name, p.price) }} />
+                        <span className={`total`}>{cart[pid]}</span>
+                        <FontAwesomeIcon icon={faMinus} onClick={(_) => { decrementTotal(p.id, p.name, p.price) }} />
+                      </div>
+                    </td>
+                    <td>{p.price * cart[pid]}</td>
+                  </tr>
+                );
+              })
+            }
           </tbody>
         </table>
       </div>

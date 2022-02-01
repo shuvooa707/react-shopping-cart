@@ -3,7 +3,34 @@
   padding: 5px 10px;
   margin: 5px;
   min-width: 30vw;
+  border: 1px solid #aaa;
+  min-width: 150px;
+  margin: 5px;
+  margin-top: 5px;
+  margin-top: 15px;
+  flex-grow: 4;
+  flex-basis: 4;
+  width: 100px;
+  max-width: 188px;
 }
+.product .product-name {
+	font-size: 24px;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.thumbnail {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+.product .old-price {
+	text-decoration: line-through;
+	margin-right: 20px;
+	color: red;
+}
+.product .new-price {
+	color: green;
+}
+
 
 .addToCart {
   color: white;
@@ -16,7 +43,44 @@
   box-shadow: 2px 2px 5px #eee;
 }
 
-.total {
+input.total {
   margin: 0px 10px;
+  border: none;
+  outline: none;
+  text-align: center;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  width: 50px;
+}
+input.total[type=number] {
+  -moz-appearance: textfield;
 }
 
+
+
+.add-cart-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3px;
+  background: white;
+  padding: 6px 15px;
+  border-radius: 15px;
+}
+
+.add-cart-bar .fa-minus, .add-cart-bar .fa-plus { 
+  cursor: pointer;
+  background-color: blueviolet;
+  color: white;
+  padding: 4.5px;
+  border-radius: 50%;
+}
+
+.add-cart-bar .fa-minus:active {
+  background-color: white;
+  color: blueviolet;
+}
+
+.add-cart-bar .fa-plus:active {
+  background-color: white;
+  color: blueviolet;
+}

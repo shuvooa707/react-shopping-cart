@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Cart from './Cart.js';
 import Product from './Product.js';
 import './style.css';
@@ -18,124 +18,133 @@ export default function App() {
   let [totalProductPrice, setTotalProductPrice] = useState(0);
   let [products, setProducts] = useState( phones.phones ); 
 
+  	let cartBellNode = useRef();
 
-  function updateCart(product) {
-    if (cart[product.id]) {
-      cart[product.id] += 1;
-    } else {
-      cart[product.id] = 1;
-    }
+	function tingTing() {
+		cartBellNode.current();
+	}
 
-    let p,
-      tmp = 0;
-    for (let i in cart) {
-      tmp += cart[i];
-    }
-    setTotalProduct(tmp);
+	function updateCart(product) {
+		if (cart[product.id]) {
+		cart[product.id] += 1;
+		} else {
+		cart[product.id] = 1;
+		}
 
-    tmp = 0;
-    for (let i in cart) {
-      p = products.find((p) => {
-        if (p.id == i) {
-          return p;
-        }
-      });
-      tmp += p.price * cart[i];
-    }
-    setTotalProductPrice(tmp);
-  }
+		let p,
+		tmp = 0;
+		for (let i in cart) {
+		tmp += cart[i];
+		}
+		setTotalProduct(tmp);
 
-  function updateTotalProduct() {
-    let tmp = 0;
-    for (let i in cart) {
-      tmp += cart[i];
-    }
-    setTotalProduct(tmp);
-  }
+		tmp = 0;
+		for (let i in cart) {
+		p = products.find((p) => {
+			if (p.id == i) {
+			return p;
+			}
+		});
+		tmp += p.price * cart[i];
+		}
+		setTotalProductPrice(tmp);
+	}
 
-  function updateTotalProductPrice() {
-    let tmp = 0;
-    for (let i in cart) {
-      let p = products.find((p) => {
-        if (p.id == i) {
-          return p;
-        }
-      });
-      tmp += p.price * cart[i];
-    }
-    setTotalProductPrice(tmp);
-  }
+	function updateTotalProduct() {
+		let tmp = 0;
+		for (let i in cart) {
+		tmp += cart[i];
+		}
+		setTotalProduct(tmp);
+		return tmp;
+	}
 
-  function removeProduct(pid) {
-    console.log(cart);
-    if (cart[pid] > 1) {
-      cart[pid] -= 1;
-      updateTotalProduct();
-      updateTotalProductPrice();
-      // console.log(cart);
-      return;
-    }
-    if (!cart[pid]) {
-      updateTotalProduct();
-      updateTotalProductPrice();
-      return;
-    }
-    if (cart[pid] == 1) {
-      delete cart[pid];
-      updateTotalProduct();
-      updateTotalProductPrice();
-      return;
-    }
-  }
+	function updateTotalProductPrice() {
+		let tmp = 0;
+		for (let i in cart) {
+		let p = products.find((p) => {
+			if (p.id == i) {
+			return p;
+			}
+		});
+		tmp += p.price * cart[i];
+		}
+		setTotalProductPrice(tmp);
+	}
 
-  function getProductTotal(pid) {
-    if (cart[pid]) {
-      return parseInt(cart[pid]);
-    }
-    return 0;
-  }
+	function removeProduct(pid) {
+		if ( cart[pid] > 1 ) {
+		cart[pid] -= 1;
+		updateTotalProduct();
+		updateTotalProductPrice();
+		return;
+		}
+		if (!cart[pid]) {
+		updateTotalProduct();
+		updateTotalProductPrice();
+		return;
+		}
+		if (cart[pid] == 1) {
+		delete cart[pid];
+		updateTotalProduct();
+		updateTotalProductPrice();
+		return;
+		}
+	}
 
-  function clearCart() {
-    setCart([]);
-    setTotalProduct(0);
-    setTotalProductPrice(0);
-    console.log(cart);
-  }
+	function getProductTotal(pid) {
+		if (cart[pid]) {
+		return parseInt(cart[pid]);
+		}
+		return 0;
+	}
 
-  function getUniqKey() {
-    return parseInt(Math.random() * Date.now());
-  }
+	function clearCart() {
+		setCart([]);
+		setTotalProduct(0);
+		setTotalProductPrice(0);
+	}
+
+	function getUniqKey() {
+		return Date.now() + parseInt(Math.random() * Date.now());
+	}
 
   return (
     <div className="container">
-      <Cart 
-        cart={ cart }
-        clearCart={ clearCart.bind(this) }
-        
-      />
-      <nav className="navbar">
-        <span className={`totalProduct ${!totalProduct ? 'hide' : ''}`}>
-          {totalProduct}
-        </span>
-        <FontAwesomeIcon icon={faShoppingCart} />
-        <span className="totalProductPrice">{totalProductPrice} $</span>
-      </nav>
-      <div className="products">
-        {products.map((p) => {
-          return (
-            <Product
-              id={p.id}
-              name={p.name}
-              price={p.price}
-              thumb={'dkcfdkfdk.src'}
-              pTotal={getProductTotal(p.id)}
-              updateProduct={updateCart.bind(this)}
-              removeProduct={removeProduct.bind(this)}
-              key={getUniqKey()}
-            />
-          );
-        })}
-      </div>
+		<Cart 
+			cart={ cart }
+			clearCart={clearCart.bind(this)}
+
+			updateProduct={updateCart.bind(this)}
+			removeProduct={removeProduct.bind(this)}
+			
+			cartBellNode={ cartBellNode }
+			getProductTotal={updateTotalProduct.bind(this)}
+		/>
+		<nav className="navbar">
+			<span className={`totalProduct ${!totalProduct ? 'hide' : ''}`}>
+				{totalProduct}
+			</span>
+			<FontAwesomeIcon icon={faShoppingCart} />
+			<span className="totalProductPrice">{totalProductPrice} $</span>
+		</nav>
+		<div className="products">
+			{products.map((p) => {
+				return (
+				<Product
+					id={p.id}
+					name={p.name}
+					price={p.price}
+					thumb={'dkcfdkfdk.src'}
+					pTotal={getProductTotal(p.id)}
+					updateProduct={updateCart.bind(this)}
+					removeProduct={removeProduct.bind(this)}
+					key={getUniqKey()}
+					tingTing={tingTing}
+				/>
+				);
+			})}
+		</div>
     </div>
   );
 }
