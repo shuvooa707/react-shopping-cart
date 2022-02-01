@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import "./css/cart.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -17,19 +17,25 @@ export default function Cart(props) {
   let [cartContainerVisibility, setCartContainerVisibility] = useState(0);
   let [cartVisible, setCartVisible] =  useState(0);
   let [totalProductOnCart, setTotalProductOnCart] =  useState(0);
-  
+  let bellClear = null;
+
+
   useEffect( _ => {
     cartBellNode.current = tingTing;
     setTotalProductOnCart(getProductTotal());
   })
 
   function tingTing() {
+    if( bellClear ) {
+      clearTimeout(bellClear);
+    }
     console.log("Ting Ting");
     let cartIcon = document.querySelector(".cart-icon");
     cartIcon.classList.add("ting-bell");
     
-    setTimeout(() => {
+    bellClear = setTimeout(() => {
       cartIcon.classList.remove("ting-bell");
+      bellClear = null;
     }, 4000);
   }
 

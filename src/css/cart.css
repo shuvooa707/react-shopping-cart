@@ -104,13 +104,13 @@
 }
 
 .cart-container {
-background: white;
-border: 1px solid #aaa;
-width: 400px;
-height: 90vh;
-position: absolute;
-left: 0%;
-transition: 0.5s all cubic-bezier(0, 0, 0, 1.22);
+  background: white;
+  border: 1px solid #aaa;
+  width: 400px;
+  height: 90vh;
+  position: fixed;
+  left: 0%;
+  transition: 0.5s all cubic-bezier(0, 0, 0, 1.22);
 }
 .cart-show-button {
     position: absolute;
@@ -132,15 +132,15 @@ transition: 0.5s all cubic-bezier(0, 0, 0, 1.22);
 }
 
 .cart-show-button:hover .cart-icon {
-    color: white;
+  color: white;
 }
 
 .cart-header {
-background: indigo;
-color: white;
-padding: 10px;
-display: flex;
-justify-content: space-between;
+  background: indigo;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
 }
 
 
