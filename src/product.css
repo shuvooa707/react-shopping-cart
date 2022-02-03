@@ -13,6 +13,7 @@
   width: 100px;
   max-width: 188px;
 }
+
 .product .product-name {
 	font-size: 24px;
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -36,11 +37,17 @@
   color: white;
   background-color: dodgerblue;
   border: none;
-  border-radius: 3px;
-  padding: 3px 5px;
+  border-radius: 5px;
+  padding: 2px 6px;
   margin: 5px 0px;
   cursor: pointer;
-  box-shadow: 2px 2px 5px #eee;
+  box-shadow: 2px 2px 5px #aaa;
+  font-size: 12px;
+}
+.addToCart:active {
+  background-color: white;
+  color: coral;
+  box-shadow: 0px 0px 1px #aaa;
 }
 
 input.total {

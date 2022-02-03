@@ -105,12 +105,14 @@
 
 .cart-container {
   background: white;
-  border: 1px solid #aaa;
+  /* border: 1px solid #aaa; */
+  border-bottom-right-radius: 15px;
   width: 400px;
   height: 90vh;
   position: fixed;
   left: 0%;
   transition: 0.5s all cubic-bezier(0, 0, 0, 1.22);
+  box-shadow: 10px 10px 10px #eee;
 }
 .cart-show-button {
     position: absolute;
@@ -131,12 +133,14 @@
     color: white;
 }
 
-.cart-show-button:hover .cart-icon {
+.cart-icon:hover {
   color: white;
 }
 
 .cart-header {
-  background: indigo;
+  background: skyblue;
+  border-top: 1px solid white;
+  border-right: 1px solid white;
   color: white;
   padding: 10px;
   display: flex;

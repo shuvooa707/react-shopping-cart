@@ -16,14 +16,17 @@ body {
   margin-top: 50px;
 }
 .navbar {
-  background: indigo;
+  background: rgba(0, 0, 0, 0.767);
   padding: 10px;
   color: white;
   position: fixed;
   width: 100vw;
   top: 0px;
   left: 0px;
+  justify-content: start;
+  z-index: 1;
 }
+
 
 .totalProduct {
   margin: 0px 5px;

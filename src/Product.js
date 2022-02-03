@@ -7,6 +7,14 @@ import {
   faMinus,
   faShoppingCart,
 } from '@fortawesome/free-solid-svg-icons';
+
+import {
+    Button,
+    Backdrop,
+    CircularProgress
+} from '@mui/material';
+
+
 import Phones from "./Phones.js";
 
 
@@ -58,12 +66,12 @@ export default function Product(props) {
 		<bold className={`new-price`}>${price}</bold>
 		<br />
 		<button
-		onClick={(_) => {
-			incrementTotol();
-		}}
-		className="addToCart"
-		>
-		Add To Cart
+			onClick={(_) => {
+				incrementTotol();
+			}}
+			className="addToCart"
+			>
+			Add To Cart
 		</button>
 		<br />
 		<div className={`add-cart-bar`}>

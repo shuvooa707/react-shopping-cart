@@ -1,24 +1,28 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
+import { BrowserRouter, Route, Link, Switch, Routes } from 'react-router-dom';
 import Cart from './Cart.js';
-import Product from './Product.js';
+import Navbar from './Navbar';
+import CartPage from './CartPage.js';
+import ProductsPage from './ProductsPage.js';
 import './style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faShoppingCart,
-  faPlus,
-  faMinus,
-  faTrash,
+	faShoppingCart,
+	faPlus,
+	faMinus,
+	faTrash,
 } from '@fortawesome/free-solid-svg-icons';
+
 
 import phones from './Phones.js';
 
-export default function App() {
-  let [cart, setCart] = useState([]);
-  let [totalProduct, setTotalProduct] = useState(0);
-  let [totalProductPrice, setTotalProductPrice] = useState(0);
-  let [products, setProducts] = useState( phones.phones ); 
+export default function App(props) {
+	let [cart, setCart] = useState([]);
+	let [totalProduct, setTotalProduct] = useState(0);
+	let [totalProductPrice, setTotalProductPrice] = useState(0);
+	let [products, setProducts] = useState(phones.phones);
 
-  	let cartBellNode = useRef();
+	let cartBellNode = useRef();
 
 	function tingTing() {
 		cartBellNode.current();
@@ -26,26 +30,26 @@ export default function App() {
 
 	function updateCart(product) {
 		if (cart[product.id]) {
-		cart[product.id] += 1;
+			cart[product.id] += 1;
 		} else {
-		cart[product.id] = 1;
+			cart[product.id] = 1;
 		}
 
 		let p,
-		tmp = 0;
+			tmp = 0;
 		for (let i in cart) {
-		tmp += cart[i];
+			tmp += cart[i];
 		}
 		setTotalProduct(tmp);
 
 		tmp = 0;
 		for (let i in cart) {
-		p = products.find((p) => {
-			if (p.id == i) {
-			return p;
-			}
-		});
-		tmp += p.price * cart[i];
+			p = products.find((p) => {
+				if (p.id == i) {
+					return p;
+				}
+			});
+			tmp += p.price * cart[i];
 		}
 		setTotalProductPrice(tmp);
 	}
@@ -53,7 +57,7 @@ export default function App() {
 	function updateTotalProduct() {
 		let tmp = 0;
 		for (let i in cart) {
-		tmp += cart[i];
+			tmp += cart[i];
 		}
 		setTotalProduct(tmp);
 		return tmp;
@@ -62,42 +66,36 @@ export default function App() {
 	function updateTotalProductPrice() {
 		let tmp = 0;
 		for (let i in cart) {
-		let p = products.find((p) => {
-			if (p.id == i) {
-			return p;
-			}
-		});
-		tmp += p.price * cart[i];
+			let p = products.find((p) => {
+				if (p.id == i) {
+					return p;
+				}
+			});
+			tmp += p.price * cart[i];
 		}
 		setTotalProductPrice(tmp);
 	}
 
 	function removeProduct(pid) {
-		if ( cart[pid] > 1 ) {
-		cart[pid] -= 1;
-		updateTotalProduct();
-		updateTotalProductPrice();
-		return;
+		if (cart[pid] > 1) {
+			cart[pid] -= 1;
+			updateTotalProduct();
+			updateTotalProductPrice();
+			return;
 		}
 		if (!cart[pid]) {
-		updateTotalProduct();
-		updateTotalProductPrice();
-		return;
+			updateTotalProduct();
+			updateTotalProductPrice();
+			return;
 		}
 		if (cart[pid] == 1) {
-		delete cart[pid];
-		updateTotalProduct();
-		updateTotalProductPrice();
-		return;
+			delete cart[pid];
+			updateTotalProduct();
+			updateTotalProductPrice();
+			return;
 		}
 	}
 
-	function getProductTotal(pid) {
-		if (cart[pid]) {
-		return parseInt(cart[pid]);
-		}
-		return 0;
-	}
 
 	function clearCart() {
 		setCart([]);
@@ -105,46 +103,40 @@ export default function App() {
 		setTotalProductPrice(0);
 	}
 
-	function getUniqKey() {
-		return Date.now() + parseInt(Math.random() * Date.now());
-	}
+	useEffect( () => {
+	});
 
-  return (
-    <div className="container">
-		<Cart 
-			cart={ cart }
-			clearCart={clearCart.bind(this)}
 
-			updateProduct={updateCart.bind(this)}
-			removeProduct={removeProduct.bind(this)}
-			
-			cartBellNode={ cartBellNode }
-			getProductTotal={updateTotalProduct.bind(this)}
-		/>
-		<nav className="navbar">
-			<span className={`totalProduct ${!totalProduct ? 'hide' : ''}`}>
-				{totalProduct}
-			</span>
-			<FontAwesomeIcon icon={faShoppingCart} />
-			<span className="totalProductPrice">{totalProductPrice} $</span>
-		</nav>
-		<div className="products">
-			{products.map((p) => {
-				return (
-				<Product
-					id={p.id}
-					name={p.name}
-					price={p.price}
-					thumb={'dkcfdkfdk.src'}
-					pTotal={getProductTotal(p.id)}
-					updateProduct={updateCart.bind(this)}
-					removeProduct={removeProduct.bind(this)}
-					key={getUniqKey()}
-					tingTing={tingTing}
-				/>
-				);
-			})}
+
+	return (
+		<div className="container">
+			<BrowserRouter>
+				<Navbar totalProductPrice={totalProductPrice} totalProduct={totalProduct} />
+				<Routes>
+					<Route path="/" element={<ProductsPage
+						updateProduct={updateCart.bind(this)}
+						removeProduct={removeProduct.bind(this)}
+						tingTing={tingTing.bind(this)}
+						cart={cart}
+						cartBellNode={cartBellNode}
+						getProductTotal={updateTotalProduct.bind(this)}
+						clearCart={clearCart.bind(this)}
+					/>} />
+					<Route path="/CartPage" element={
+					<CartPage
+						cart={cart}
+						clearCart={clearCart.bind(this)}
+
+						updateProduct={updateCart.bind(this)}
+						removeProduct={removeProduct.bind(this)}
+
+						cartBellNode={cartBellNode}
+						getProductTotal={updateTotalProduct.bind(this)}
+						totalProductPrice={totalProductPrice}
+						totalProduct={totalProduct}
+						/>} />
+				</Routes>
+			</BrowserRouter>
 		</div>
-    </div>
-  );
+	);
 }
