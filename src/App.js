@@ -16,13 +16,16 @@ import {
 
 import phones from './Phones.js';
 
+export const CartContext = React.createContext();
+
 export default function App(props) {
 	let [cart, setCart] = useState([]);
 	let [totalProduct, setTotalProduct] = useState(0);
 	let [totalProductPrice, setTotalProductPrice] = useState(0);
 	let [products, setProducts] = useState(phones.phones);
-
 	let cartBellNode = useRef();
+
+
 
 	function tingTing() {
 		cartBellNode.current();
@@ -41,7 +44,7 @@ export default function App(props) {
 			tmp += cart[i];
 		}
 		setTotalProduct(tmp);
-
+  
 		tmp = 0;
 		for (let i in cart) {
 			p = products.find((p) => {
@@ -110,33 +113,34 @@ export default function App(props) {
 
 	return (
 		<div className="container">
-			<BrowserRouter>
-				<Navbar totalProductPrice={totalProductPrice} totalProduct={totalProduct} />
-				<Routes>
-					<Route path="/" element={<ProductsPage
-						updateProduct={updateCart.bind(this)}
-						removeProduct={removeProduct.bind(this)}
-						tingTing={tingTing.bind(this)}
-						cart={cart}
-						cartBellNode={cartBellNode}
-						getProductTotal={updateTotalProduct.bind(this)}
-						clearCart={clearCart.bind(this)}
-					/>} />
-					<Route path="/CartPage" element={
-					<CartPage
-						cart={cart}
-						clearCart={clearCart.bind(this)}
-
-						updateProduct={updateCart.bind(this)}
-						removeProduct={removeProduct.bind(this)}
-
-						cartBellNode={cartBellNode}
-						getProductTotal={updateTotalProduct.bind(this)}
-						totalProductPrice={totalProductPrice}
-						totalProduct={totalProduct}
+			<CartContext.Provider value={{cart, products}}>
+				<BrowserRouter>
+					<Navbar totalProductPrice={totalProductPrice} totalProduct={totalProduct} />
+					<Routes>
+						<Route path="/" element={<ProductsPage
+							updateProduct={updateCart.bind(this)}
+							removeProduct={removeProduct.bind(this)}
+							tingTing={tingTing.bind(this)}
+							cartBellNode={cartBellNode}
+							getProductTotal={updateTotalProduct.bind(this)}
+							clearCart={clearCart.bind(this)}
 						/>} />
-				</Routes>
-			</BrowserRouter>
+						<Route path="/CartPage" element={
+						<CartPage
+							cart={cart}
+							clearCart={clearCart.bind(this)}
+
+							updateProduct={updateCart.bind(this)}
+							removeProduct={removeProduct.bind(this)}
+
+							cartBellNode={cartBellNode}
+							getProductTotal={updateTotalProduct.bind(this)}
+							totalProductPrice={totalProductPrice}
+							totalProduct={totalProduct}
+							/>} />
+					</Routes>
+				</BrowserRouter>
+			</CartContext.Provider>
 		</div>
 	);
 }

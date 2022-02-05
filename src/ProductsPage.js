@@ -3,19 +3,20 @@ import React, { useState, componentWillReceiveProps, useEffect, useMemo } from '
 import phones from './Phones.js';
 import Product from './Product.js';
 import Cart from './Cart.js';
+import { CartContext } from './App.js';
+
 
 export default function ProductsPage(props) {
     let {
-        cart,
         updateProduct, 
         removeProduct, 
         tingTing, 
         clearCart, 
         cartBellNode,
     } = props;
-    let [products, setProducts] = useState( phones.phones ); 
-	let [x, setX] = useState(1);
+    // let [products, setProducts] = useState( phones.phones ); 
 
+    let { cart, products } = React.useContext(CartContext);
 
 	function getUniqKey() {
 		return Date.now() + parseInt(Math.random() * Date.now());
@@ -28,16 +29,11 @@ export default function ProductsPage(props) {
 		return 0;
 	}
 
-	useMemo( () => {
-		setX(x+1);
-		console.log(x);
-	},[props]);
 
 
     return (
         <div className='container'>
             <Cart
-			cart={ cart }
 			clearCart={clearCart}
 
 			updateProduct={updateProduct}

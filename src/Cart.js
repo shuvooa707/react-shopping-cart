@@ -8,17 +8,20 @@ import {
 	faTrash,
 	faTimes
 } from '@fortawesome/free-solid-svg-icons';
+import { BrowserRouter, Route, Link, Switch, Routes, useLocation } from 'react-router-dom';
+import { Modal as BSModal, Button as BSButton  } from 'react-bootstrap';
+import { Button, Backdrop, CircularProgress } from '@mui/material';
 
-import phones from './Phones.js';
+
+import { CartContext } from './App';
 export default function Cart(props) {
-	let { cart, clearCart, updateProduct, removeProduct, cartBellNode, getProductTotal } = props;
-	let [products, setProducts] = useState(phones.phones);
-
+	let { clearCart, updateProduct, removeProduct, cartBellNode, getProductTotal } = props;
 	let [cartContainerVisibility, setCartContainerVisibility] = useState(0);
 	let [cartVisible, setCartVisible] = useState(0);
 	let [totalProductOnCart, setTotalProductOnCart] = useState(0);
 	let bellClear = null;
 
+    let {cart, products} = React.useContext(CartContext);
 
 	useEffect(_ => {
 		cartBellNode.current = tingTing;
@@ -126,6 +129,9 @@ export default function Cart(props) {
 					</tbody>
 				</table>
 			</div>
+				<Link to="/CartPage" className='w-100' style={{position:"absolute", bottom: "0px", width: "100%"}}>
+					<Button variant="contained" color='error' className='w-100' >Checkout</Button>
+                </Link>
 		</div>
 	);
 }

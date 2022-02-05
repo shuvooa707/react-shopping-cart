@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import "./css/cart.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -18,9 +18,10 @@ import {
 
 
 import phones from './Phones.js';
+import { CartContext } from './App';
 export default function CartPage(props) {
-    let { cart, clearCart, updateProduct, removeProduct, cartBellNode, getProductTotal, totalProductPrice, totalProduct } = props;
-    let [products, setProducts] = useState(phones.phones);
+    let { updateProduct, removeProduct, cartBellNode, getProductTotal, totalProductPrice, totalProduct } = props;
+    // let [products, setProducts] = useState(phones.phones);
 
     let [cartContainerVisibility, setCartContainerVisibility] = useState(0);
     let [cartVisible, setCartVisible] = useState(0);
@@ -28,6 +29,9 @@ export default function CartPage(props) {
     let bellClear = null;
     let [show, setShow] = useState(false);
     let [backDropOpen, setBackDropOpen] = useState(false);
+
+    let {cart, products} = React.useContext(CartContext);
+    
 
     useEffect(_ => {
         cartBellNode.current = tingTing;
@@ -53,6 +57,35 @@ export default function CartPage(props) {
         setCartVisible(!cartVisible);
     }
 
+    function confirmPayment() {
+
+        let name = document.querySelector("#payment-form input[name='name']");
+        let phone = document.querySelector("input[name='phone']");
+        let address = document.querySelector(".address");
+
+        let flag = false;
+        if ( !name.value.length ) {
+            name.classList.add("is-invalid");
+            name.nextElementSibling.classList.remove("hide");
+            flag = true;
+        }
+        if ( !phone.value.length ) {
+            phone.classList.add("is-invalid");
+            phone.nextElementSibling.classList.remove("hide");
+            flag = true;
+        }
+        if ( !address.value.length ) {
+            address.classList.add("is-invalid");
+            address.nextElementSibling.classList.remove("hide");
+            flag = true;
+        }
+
+        if ( flag ) {
+            return;
+        }
+
+        setBackDropOpen(!backDropOpen);
+    }
 
     function incrementTotal(id, name, price) {
 
@@ -141,20 +174,29 @@ export default function CartPage(props) {
                     <FontAwesomeIcon icon={faTimes} style={{cursor:"pointer"}} onClick={_=> setShow(!show) }/>
                 </div>
                 <Modal.Body>
-                    <div className='form-group mt-2'>
+                    <div className='form-group mt-2' id="payment-form">
                         <label >Name : </label>
-                        <input type={'text'} name='name' className='form-control' />
+                        <input type={'text'} name='name' className='form-control ' />
+                        <div id="invalid-name" className="invalid-feedback hide">
+                            Please provide a Name.
+                        </div>
                     </div>
                     <div className='form-group mt-2'>
                         <label >Phone : </label>
                         <input type={'text'} name='phone' className='form-control' />
+                        <div id="invalid-phone" className="invalid-feedback hide">
+                            Please provide a Phone Number.
+                        </div>
                     </div>
                     <div className='form-group mt-2'>
                         <label >Address : </label>
-                        <textarea className='form-control'></textarea>
+                        <textarea className='form-control address' name='address'></textarea>
+                        <div id="invalid-address" className="invalid-feedback hide">
+                            Please provide a Valid Address.
+                        </div>
                     </div>
                     <div className='form-group mt-2'>
-                        <Button variant="contained" color='error' className='w-100' onClick={ _ => { setBackDropOpen(!backDropOpen) } }>Confirm</Button>
+                        <Button variant="contained" color='error' className='w-100' onClick={ _ => { confirmPayment() } }>Confirm</Button>
                     </div>
                 </Modal.Body>
             </Modal>
