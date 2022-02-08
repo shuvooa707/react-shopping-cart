@@ -9,8 +9,9 @@ import {
 	faTimes
 } from '@fortawesome/free-solid-svg-icons';
 import { BrowserRouter, Route, Link, Switch, Routes, useLocation } from 'react-router-dom';
-import { Modal as BSModal, Button as BSButton  } from 'react-bootstrap';
 import { Button, Backdrop, CircularProgress } from '@mui/material';
+import { Drawer, AntButton } from 'antd';
+
 
 
 import { CartContext } from './App';
@@ -53,6 +54,7 @@ export default function Cart(props) {
 	function showCart() {
 		setCartContainerVisibility(!cartContainerVisibility);
 		setCartVisible(!cartVisible);
+
 	}
 
 
@@ -68,6 +70,8 @@ export default function Cart(props) {
 		// decrements products in the cart
 		removeProduct(id);
 	}
+
+
 
 	return (
 		<div
@@ -131,9 +135,9 @@ export default function Cart(props) {
 			</div>
 				<Link to="/CartPage" className='w-100' style={{position:"absolute", bottom: "0px", width: "100%"}}>
 					<Button variant="contained" color='error' className='w-100' >Checkout</Button>
-                </Link>
+				</Link>
 		</div>
 	);
 }
 
-// a b 
+
